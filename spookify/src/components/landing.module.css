@@ -1,0 +1,57 @@
+  .container {
+    padding: 2em;
+    background-color: #2b0047; 
+    color: white;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    gap: 2em;
+  }
+  
+  .spookifyTitle {
+    font-size: 4em;
+    color: #f4e78a; /* Yellow Text Effect */
+    font-family: 'Creepster', cursive; /* Optional spooky font */
+    margin-bottom: 0.5em;
+  }
+  
+  .tagline {
+    font-size: 1.5em;
+    margin-bottom: 1em;
+  }
+  
+  .fright {
+    font-size: 2.5em;
+    color: #f4e78a; /* Matching yellow color */
+    font-family: 'Creepster', cursive;
+    margin-bottom: 0.5em;
+  }
+  
+  .description {
+    font-size: 1.2em;
+    margin-bottom: 2em;
+  }
+  
+  .image {
+    border-radius: 50px;
+    width: 33em;
+    height: 33em;
+  }
+  
+  /* Button Style */
+   .button {
+    border-radius: 50px;
+    background-color: #f4e78a;
+    padding: 1em 3em;
+    color: #2b0047;
+    font-size: 1.2em;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  } 
+   
+  .button:hover {
+    background-color: #dabf67; 
+  } 
+  

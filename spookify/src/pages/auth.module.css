@@ -1,0 +1,60 @@
+.container {
+    padding: 2em;
+    background-color: #2b0047;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    gap: 2em;
+  }
+  
+  .title {
+    font-size: 3em;
+    color: #f4e78a; /* Yellow Text Effect */
+    font-family: 'Creepster', cursive; /* Optional spooky font */
+    margin-bottom: 0.5em;
+  }
+  
+  .input {
+    margin: 10px 0;
+    padding: 10px;
+    width: 100%;
+    max-width: 300px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  .button {
+    border-radius: 50px;
+    background-color: #f4e78a;
+    padding: 1em 3em;
+    color: #2b0047;
+    font-size: 1.2em;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 10px 0;
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .button:hover {
+    background-color: #dabf67;
+  }
+  
+  .message {
+    margin-top: 20px;
+    color: red;
+  }
+  
+  .switchButton {
+    background: none;
+    border: none;
+    color: #f4e78a;
+    cursor: pointer;
+    font-size: 1em;
+    text-decoration: underline;
+  }

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useAuth } from "../auth/authContext";
@@ -8,92 +8,12 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import { Mistral } from "@mistralai/mistralai";
 import supabase from "../auth/supabaseClient"; // Import Supabase client
 import styles from "./dashboard.module.css"; // Import the CSS module
+import CategorySelector from "../components/CategorySelector/CategorySelector"; // Import CategorySelector component
+import TextInput from "../components/TextInput/TextInput"; // Import TextInput component
+import ResponseDisplay from "../components/ResponseDisplay/ResponseDisplay"; // Import ResponseDisplay component
 
 const apiKey = process.env.NEXT_PUBLIC_MISTRAL_API_KEY;
 const client = new Mistral({ apiKey: apiKey });
-
-const Checkbox = ({ name, checked, onChange, label }) => (
-  <div className={styles.category}>
-    <label>
-      <input
-        type="checkbox"
-        name={name}
-        checked={checked}
-        onChange={onChange}
-      />
-      <span className={styles.checkboxLabel}>{label}</span>
-    </label>
-  </div>
-);
-
-const TextInput = ({ value, onChange }) => (
-  <div className={styles.inputSection}>
-    <label className={styles.inputLabel}>
-      Enter your items:
-      <input
-        type="text"
-        value={value}
-        onChange={onChange}
-        className={styles.textInput}
-      />
-    </label>
-  </div>
-);
-
-const ResponseDisplay = ({ response }) => {
-  const formatResponseAsList = (responseText) => {
-    const steps = responseText.match(/\d+\.\s+[^\.]+\./g);
-    return steps || [responseText];
-  };
-
-  return (
-    response && (
-      <div className={styles.responseSection}>
-        {typeof response === "object" ? (
-          <div>
-            <h3>{response.title}</h3>
-            <p>
-              <strong>Items needed:</strong> {response.input}
-            </p>
-            <h4>Steps:</h4>
-            <ol className={styles.response}>
-              {formatResponseAsList(response.response).map((step, index) => (
-                <ul key={index}>{step.trim()}</ul>
-              ))}
-            </ol>
-          </div>
-        ) : (
-          <p>{response}</p>
-        )}
-      </div>
-    )
-  );
-};
-
-function CategorySelector({ category, handleCheckboxChange }) {
-  return (
-    <>
-      <Checkbox
-        name="DIY"
-        checked={category.DIY}
-        onChange={handleCheckboxChange}
-        label="DIY"
-      />
-      <Checkbox
-        name="FOOD"
-        checked={category.FOOD}
-        onChange={handleCheckboxChange}
-        label="FOOD"
-      />
-      <Checkbox
-        name="PARTY"
-        checked={category.PARTY}
-        onChange={handleCheckboxChange}
-        label="PARTY"
-      />
-    </>
-  );
-}
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -106,6 +26,30 @@ const Dashboard = () => {
   });
   const [prompt, setPrompt] = useState("");
   const [error, setError] = useState(""); // State to store error messages
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (user) {
+        const { data: userData, error: userError } = await supabase
+          .from("users")
+          .select("*")
+          .eq("firebase_uid", user.uid)
+          .single();
+
+        if (userError) {
+          console.error("Error fetching user data:", userError);
+          setError(userError.message);
+        } else if (!userData) {
+          console.error("No user data found.");
+          setError("No user data found.");
+        } else {
+          console.log("User data:", userData);
+        }
+      }
+    };
+
+    fetchUserData();
+  }, [user]);
 
   const handleCheckboxChange = (e) => {
     const { name } = e.target;

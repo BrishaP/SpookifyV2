@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
+import Link from 'next/link'; // Import Link component
 import { useAuth } from '../auth/authContext';
 import { signOut } from '../auth/signOut';
 import supabase from '../auth/supabaseClient'; // Import Supabase client
@@ -11,18 +12,41 @@ const SavedSearches = () => {
   const router = useRouter();
   const [searches, setSearches] = useState([]);
   const [expandedSearchId, setExpandedSearchId] = useState(null);
+  const [error, setError] = useState(""); // State to store error messages
 
   useEffect(() => {
     const fetchSearches = async () => {
       if (user) {
-        console.log("User ID:", user.uid); // Debugging log
+        // Retrieve user data from Supabase using Firebase UID
+        const { data: userData, error: userError } = await supabase
+          .from('users')
+          .select('*')
+          .eq('firebase_uid', user.uid)
+          .single();
+
+        if (userError) {
+          console.error("Error fetching user data:", userError);
+          setError(userError.message);
+          return;
+        }
+
+        if (!userData) {
+          console.error("No user data found.");
+          setError("No user data found.");
+          return;
+        }
+
+        const userId = userData.id;
+
+        console.log("User ID:", userId); // Debugging log
         const { data, error } = await supabase
           .from('saved_searches')
           .select('*')
-          .eq('user_id', user.uid);
+          .eq('user_id', userId);
 
         if (error) {
           console.error("Error fetching saved searches:", error);
+          setError(error.message);
         } else {
           console.log("Fetched searches:", data); // Debugging log
           setSearches(data);
@@ -52,8 +76,12 @@ const SavedSearches = () => {
         Sign Out
       </button>
       <h2 className={styles.header}>Your Saved Searches</h2>
+      <Link href="/dashboard">
+        <button className={styles.dashboardButton}>Return to Dashboard</button>
+      </Link>
       <div className={styles.grid}>
-        {searches.length === 0 && <p>No saved searches found.</p>}
+        {error && <p className={styles.error}>{error}</p>}
+        {searches.length === 0 && !error && <p>No saved searches found.</p>}
         {searches.map((search) => (
           <div
             key={search.id}

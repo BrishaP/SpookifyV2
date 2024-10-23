@@ -1,0 +1,16 @@
+.inputSection {
+    margin: 10px 0;
+  }
+  
+  .inputLabel {
+    font-size: 1.2em;
+  }
+  
+  .textInput {
+    margin-top: 5px;
+    padding: 10px;
+    width: 100%;
+    max-width: 300px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }

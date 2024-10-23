@@ -1,19 +1,26 @@
 "use client";
 import React, { useState } from "react";
-import { useRouter } from 'next/router';
-import { useAuth } from '../auth/authContext';
-import { signOut } from '../auth/signOut';
-import ProtectedRoute from '../components/ProtectedRoute';
+import { useRouter } from "next/router";
+import Link from "next/link";
+import { useAuth } from "../auth/authContext";
+import { signOut } from "../auth/signOut";
+import ProtectedRoute from "../components/ProtectedRoute";
 import { Mistral } from "@mistralai/mistralai";
-import styles from './dashboard.module.css'; // Import the CSS module
+import supabase from "../auth/supabaseClient"; // Import Supabase client
+import styles from "./dashboard.module.css"; // Import the CSS module
 
-const apiKey = process.env.NEXT_PUBLIC_MISTRAL_API_KEY; 
+const apiKey = process.env.NEXT_PUBLIC_MISTRAL_API_KEY;
 const client = new Mistral({ apiKey: apiKey });
 
 const Checkbox = ({ name, checked, onChange, label }) => (
   <div className={styles.category}>
     <label>
-      <input type="checkbox" name={name} checked={checked} onChange={onChange} />
+      <input
+        type="checkbox"
+        name={name}
+        checked={checked}
+        onChange={onChange}
+      />
       <span className={styles.checkboxLabel}>{label}</span>
     </label>
   </div>
@@ -23,7 +30,12 @@ const TextInput = ({ value, onChange }) => (
   <div className={styles.inputSection}>
     <label className={styles.inputLabel}>
       Enter your items:
-      <input type="text" value={value} onChange={onChange} className={styles.textInput} />
+      <input
+        type="text"
+        value={value}
+        onChange={onChange}
+        className={styles.textInput}
+      />
     </label>
   </div>
 );
@@ -152,10 +164,50 @@ const Dashboard = () => {
     }
   };
 
+  const saveSearch = async (
+    userId,
+    title,
+    itemsNeeded,
+    responseInstructions
+  ) => {
+    try {
+      const { data, error } = await supabase
+        .from("saved_searches")
+        .insert([
+          {
+            user_id: userId,
+            title,
+            items_needed: itemsNeeded,
+            response_instructions: responseInstructions,
+          },
+        ]);
+
+      if (error) throw error;
+
+      console.log("Search saved successfully:", data);
+    } catch (error) {
+      console.error("Error saving search:", error);
+      setError("Error saving search. Please try again.");
+    }
+  };
+
+  const handleSaveSearch = async () => {
+    if (response) {
+      await saveSearch(
+        user.uid,
+        response.title,
+        response.input,
+        response.response
+      );
+    } else {
+      setError("No response to save. Please generate a response first.");
+    }
+  };
+
   const handleSignOut = async () => {
     try {
       await signOut();
-      router.push('/'); // Redirect to landing page after sign-out
+      router.push("/"); // Redirect to landing page after sign-out
     } catch (error) {
       console.error("Error signing out:", error);
       setError("Error signing out. Please try again.");
@@ -166,21 +218,31 @@ const Dashboard = () => {
     <ProtectedRoute>
       <div className={styles.container}>
         <h2 className={styles.header}>😈 Spookify Your Activities 😈</h2>
-
-        {error && <p className={styles.error}>{error}</p>} {/* Display error message */}
-
-        <CategorySelector category={category} handleCheckboxChange={handleCheckboxChange} />
-
+        {error && <p className={styles.error}>{error}</p>}{" "}
+        {/* Display error message */}
+        <CategorySelector
+          category={category}
+          handleCheckboxChange={handleCheckboxChange}
+        />
         <TextInput value={prompt} onChange={handlePromptChange} />
-
         <div className={styles.submitSection}>
           <button onClick={handleSubmit} className={styles.submitButton}>
             Submit
           </button>
         </div>
-
         <ResponseDisplay response={response} />
-
+        {response && (
+          <div className={styles.saveSection}>
+            <button onClick={handleSaveSearch} className={styles.saveButton}>
+              Save Search
+            </button>
+          </div>
+        )}
+        <Link href="/savedsearches">
+          <button className={styles.savedSearchesButton}>
+            View Saved Searches
+          </button>
+        </Link>
         <button onClick={handleSignOut} className={styles.signOutButton}>
           Sign Out
         </button>

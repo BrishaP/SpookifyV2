@@ -87,3 +87,34 @@
   .signOutButton:hover {
     background-color: #dabf67;
   }
+
+  .saveButton {
+    border-radius: 50px;
+    background-color: #f4e78a;
+    padding: 1em 3em;
+    color: #2b0047;
+    font-size: 1.2em;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .saveButton:hover {
+    background-color: #dabf67;
+  }
+
+  .savedSearchesButton {
+    border-radius: 50px;
+    background-color: #f4e78a;
+    padding: 1em 3em;
+    color: #2b0047;
+    font-size: 1.2em;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+  }
+  
+  .savedSearchesButton:hover {
+    background-color: #dabf67;
+  }

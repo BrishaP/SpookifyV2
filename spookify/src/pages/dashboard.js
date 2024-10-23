@@ -93,6 +93,7 @@ const Dashboard = () => {
     PARTY: false,
   });
   const [prompt, setPrompt] = useState("");
+  const [error, setError] = useState(""); // State to store error messages
 
   const handleCheckboxChange = (e) => {
     const { name } = e.target;
@@ -144,18 +145,20 @@ const Dashboard = () => {
 
       const aiData = JSON.parse(chatResponse.choices[0].message.content);
       setResponse(aiData);
+      setError(""); // Clear any previous errors
     } catch (error) {
       console.error("Error fetching AI response:", error);
-      setResponse("Sorry, something went wrong.");
+      setError("Sorry, something went wrong. Please try again later.");
     }
   };
 
   const handleSignOut = async () => {
     try {
       await signOut();
-      router.push('/login'); // Redirect to login page after sign-out
+      router.push('/'); // Redirect to landing page after sign-out
     } catch (error) {
       console.error("Error signing out:", error);
+      setError("Error signing out. Please try again.");
     }
   };
 
@@ -163,6 +166,8 @@ const Dashboard = () => {
     <ProtectedRoute>
       <div className={styles.container}>
         <h2 className={styles.header}>😈 Spookify Your Activities 😈</h2>
+
+        {error && <p className={styles.error}>{error}</p>} {/* Display error message */}
 
         <CategorySelector category={category} handleCheckboxChange={handleCheckboxChange} />
 

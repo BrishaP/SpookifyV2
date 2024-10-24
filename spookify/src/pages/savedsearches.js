@@ -92,7 +92,14 @@ const SavedSearches = () => {
             {expandedSearchId === search.id && (
               <div className={styles.details}>
                 <p><strong>Items needed:</strong> {search.items_needed}</p>
-                <p><strong>Instructions:</strong> {search.response_instructions}</p>
+                <p><strong>Instructions:</strong></p>
+                <ul>
+                  {search.response_instructions.split(/\\n|\\\\n/).map((step, index) => {
+                    const cleanedStep = step.replace(/^\d+\.\s*/, '').trim();
+                    console.log(`Step ${index + 1}: ${cleanedStep}`); // Debugging log
+                    return <li key={index}>{cleanedStep}</li>;
+                  })}
+                </ul>
                 <p><strong>Saved on:</strong> {new Date(search.search_date).toLocaleDateString()}</p>
               </div>
             )}

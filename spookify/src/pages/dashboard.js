@@ -30,20 +30,25 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       if (user) {
-        const { data: userData, error: userError } = await supabase
-          .from("users")
-          .select("*")
-          .eq("firebase_uid", user.uid)
-          .single();
+        try {
+          const { data: userData, error: userError } = await supabase
+            .from("users")
+            .select("*")
+            .eq("firebase_uid", user.uid)
+            .single();
 
-        if (userError) {
-          console.error("Error fetching user data:", userError);
-          setError(userError.message);
-        } else if (!userData) {
-          console.error("No user data found.");
-          setError("No user data found.");
-        } else {
-          console.log("User data:", userData);
+          if (userError) {
+            console.error("Error fetching user data:", userError);
+            setError(userError.message);
+          } else if (!userData) {
+            console.error("No user data found.");
+            setError("No user data found.");
+          } else {
+            console.log("User data:", userData);
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+          setError("Error fetching user data. Please try again later.");
         }
       }
     };

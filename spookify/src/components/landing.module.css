@@ -4,15 +4,15 @@
     color: white;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    width: 100vw;
+    min-height: 100vh;
+    box-sizing: border-box;
     gap: 2em;
   }
   
   .spookifyTitle {
     font-size: 4em;
-    color: #f4e78a; /* Yellow Text Effect */
-    font-family: 'Creepster', cursive; /* Optional spooky font */
+    color: #f4e78a; 
+    font-family: 'Creepster', cursive; 
     margin-bottom: 0.5em;
   }
   
@@ -23,7 +23,7 @@
   
   .fright {
     font-size: 2.5em;
-    color: #f4e78a; /* Matching yellow color */
+    color: #f4e78a; 
     font-family: 'Creepster', cursive;
     margin-bottom: 0.5em;
   }
@@ -39,7 +39,6 @@
     height: 33em;
   }
   
-  /* Button Style */
    .button {
     border-radius: 50px;
     background-color: #f4e78a;

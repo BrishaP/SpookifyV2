@@ -1,6 +1,6 @@
 # Spookify
 
-Spookify is a Halloween-themed web application that helps users discover spooky recipes, fun DIY activities, and effortless party planning tips. The app features tailored suggestions based on user input.
+Spookify is a Halloween-themed web application that helps users discover spooky recipes, fun DIY activities, and effortless party planning tips. The app features tailored suggestions based on user input (/based on what you have at home).
 
 ## Links to:
 - **Deployed app:** https://vercel.com/api/toolbar/link/spookify-v2.vercel.app?via=project-dashboard-alias-list&p=1&page=/
